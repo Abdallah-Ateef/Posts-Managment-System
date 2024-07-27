@@ -8,13 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'title', // أضف هذا السطر
+        'title',
         'content',
-        // أضف أي حقول أخرى تريد أن تكون قابلة للتخصيص الجماعي
+        'user_id',  // Make sure this is fillable
     ];
 
-    public function User(){
-        return $this->belongsTo(User::class);
+    /**
+     * Get the user that owns the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

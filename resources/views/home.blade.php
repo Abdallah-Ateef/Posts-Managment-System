@@ -13,8 +13,10 @@
           <p class="card-text">{{\Str::limit($post->description,50)}}</p>
           <a href="{{route('posts.show',$post->id)}}" class="btn btn-primary">Show More Details</a>
         </div>
+
       </div>
   @endforeach
+    {{$posts->links()}}
 </div>
 @endsection
-    
+

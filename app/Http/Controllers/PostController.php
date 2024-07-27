@@ -12,12 +12,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::all();
+        $posts=Post::paginate(10);
         return view('posts.index',compact('posts'));
+
     }
     public function home()
     {
-        $posts=Post::all();
+        $posts=Post::paginate(10);
         return view('home',compact('posts'));
     }
 
@@ -26,7 +27,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        
+
         return view('posts.create');
     }
 
@@ -48,7 +49,7 @@ class PostController extends Controller
        $post->user_id=$request->user_id;
        $post->save();
        return back()->with('success','Post Added Successfully');
-        
+
     }
 
     /**
@@ -74,12 +75,12 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-      
+
       $validate=  $request->validate([
             'title'=>'required|min:3|string',
             'description'=>'required',
             'user_id'=>'required|exists:users,id'
-    
+
            ]);
            $post=Post::findOrFail($id);
            $post->update($validate);
