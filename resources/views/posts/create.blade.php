@@ -40,6 +40,17 @@
                 <div class="alert alert-danger m-2">{{ $message }}</div>
             @enderror
               </div>
+        <div class="mb-3">
+            <label for="tag">Tags</label>
+            <select id="tag" class="form-control" name="tags[]" multiple>
+                @foreach($tags as $tag)
+                    <option value="{{$tag->id}}">{{$tag->name}}</option>
+                @endforeach
+            </select>
+            @error('user_id')
+            <div class="alert alert-danger m-2">{{ $message }}</div>
+            @enderror
+        </div>
               <div class="mb-3">
                 <input type="submit" class="form-control bg-success" value="Save">
               </div>

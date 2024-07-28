@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -29,8 +30,9 @@ class PostController extends Controller
     public function create()
     {
         $users=User::select('id','name')->get();
+        $tags=Tag::select('id','name')->get();
 
-        return view('posts.create',compact('users'));
+        return view('posts.create',compact('users','tags'));
     }
 
     /**
@@ -55,6 +57,7 @@ class PostController extends Controller
        $post->user_id=$request->user_id;
        $post->image_path=$path;
        $post->save();
+        $post->tags()->sync($request->tages);
        return back()->with('success','Post Added Successfully');
 
 

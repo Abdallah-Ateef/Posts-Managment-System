@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Tag;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Post extends Model
         'title',
         'content',
         'user_id',  // Make sure this is fillable
+        'image_path'
     ];
 
     /**
@@ -28,6 +30,10 @@ class Post extends Model
            return  asset('posts-images/'.$this->image_path);
         }
         else return asset('posts-images/default.jpg');
+    }
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class);
     }
 
 }
