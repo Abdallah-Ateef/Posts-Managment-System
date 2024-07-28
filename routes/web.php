@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[PostController::class,'home'])->name('home');
@@ -16,4 +17,6 @@ Route::resource('posts',PostController::class)->names([
 ]);
 
  Route::get('/search',[PostController::class,'search'])->name('posts.search');
+ Route::resource('users',UserController::class);
+ Route::get('user/posts/{id}',[UserController::class,'posts'])->name('user.posts');
 

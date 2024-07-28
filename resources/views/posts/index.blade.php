@@ -17,6 +17,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>User</th>
+              <th>Image</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -28,6 +29,7 @@
             <td>{{$post->title}}</td>
             <td>{{$post->description}}</td>
             <td>{{$post->user->name}}</td>
+              <td><img src="{{$post->image()}}"style="width: 100px;height: 100px;border-radius: 20px"></td>
             <td><a href="{{route('posts.edit',$post->id)}}"><button type="button" class="btn btn-info">Edit</button></a> </td>
             <form action="{{route('posts.destroy',$post->id)}}" method="POST">
               @csrf

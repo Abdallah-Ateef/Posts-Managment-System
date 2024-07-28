@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -27,8 +28,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        $users=User::select('id','name')->get();
 
-        return view('posts.create');
+        return view('posts.create',compact('users'));
     }
 
     /**
@@ -39,16 +41,22 @@ class PostController extends Controller
        $request->validate([
         'title'=>'required|min:3|string',
         'description'=>'required',
-        'user_id'=>'required|exists:users,id'
+        'user_id'=>'required|exists:users,id',
+           'image'=>'required|image|mimes:png,jpg,jpeg,gif',
 
        ]);
+        $image= $request->file('image')->getClientOriginalName();
+         $path=$request->file('image')->StoreAs('imgs',$image,'posts');
+
 
        $post=new Post;
        $post->title=$request->title;
        $post->description=$request->description;
        $post->user_id=$request->user_id;
+       $post->image_path=$path;
        $post->save();
        return back()->with('success','Post Added Successfully');
+
 
     }
 

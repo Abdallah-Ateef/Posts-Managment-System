@@ -22,4 +22,12 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function image(){
+        if($this->image_path){
+           return  asset('posts-images/'.$this->image_path);
+        }
+        else return asset('posts-images/default.jpg');
+    }
+
 }
