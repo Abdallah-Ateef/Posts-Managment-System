@@ -2,12 +2,20 @@
 @section('title','posts')
 @section('content')
 <div class="container">
+    @can('writer_control')
   <a href="{{route('posts.create')}}"><button type="button" class="btn btn-primary m-3">Add New Post</button>
   </a>
+    @endcan
     <h1 class="text-center p-3">View All Posts To Admin</h1>
     @if(session()->get('success'))
     <div class="alert alert-danger">{{session()->get('success')}}</div>
     @endif
+        <div class="row">
+            <form action="">
+                <input type="text" name="name_txt" value="{{$txt}}">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     <div class="row">
     <div class="col-12">
     <table class="table table-borderd">
@@ -25,12 +33,16 @@
         <tbody>
           @foreach ($posts as $post)
           <tr>
-            <th>{{$loop->iteration}}</th>
+            <th>{{$post->id}}</th>
             <td>{{$post->title}}</td>
             <td>{{$post->description}}</td>
             <td>{{$post->user->name}}</td>
               <td><img src="{{$post->image()}}"style="width: 100px;height: 100px;border-radius: 20px"></td>
-            <td><a href="{{route('posts.edit',$post->id)}}"><button type="button" class="btn btn-info">Edit</button></a> </td>
+            <td>
+                @can('update_post',$post)
+                <a href="{{route('posts.edit',$post->id)}}"><button type="button" class="btn btn-info">Edit</button></a>
+                @endcan
+            </td>
             <form action="{{route('posts.destroy',$post->id)}}" method="POST">
               @csrf
               @method('delete')
@@ -43,7 +55,7 @@
     </div>
     </div>
 
-    {{$posts->links()}}
+        {{$posts->links()}}
 
 </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -10,6 +11,11 @@ use function Laravel\Prompts\password;
 
 class UserController extends Controller
 {
+
+    public  function __construct()
+    {
+//        Gate:$this->authorize('admin_control');
+    }
     /**
      * Display a listing of the resource.
      */

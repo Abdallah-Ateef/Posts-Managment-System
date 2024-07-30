@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -12,10 +13,11 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts=Post::paginate(10);
-        return view('posts.index',compact('posts'));
+        $txt=$request->name_txt;
+        $posts=Post::where('title','LIKE','%'.$request->name_txt.'%')->orderBy('id', 'desc')->paginate(10)->appends(request()->query());
+        return view('posts.index',compact('posts','txt'));
 
     }
     public function home()
@@ -29,6 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        Gate:$this->authorize('writer_control');
         $users=User::select('id','name')->get();
         $tags=Tag::select('id','name')->get();
 
@@ -40,6 +43,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        Gate:$this->authorize('writer_control');
        $request->validate([
         'title'=>'required|min:3|string',
         'description'=>'required',
@@ -57,7 +61,8 @@ class PostController extends Controller
        $post->user_id=$request->user_id;
        $post->image_path=$path;
        $post->save();
-        $post->tags()->sync($request->tages);
+//       $syncpost=Post::findOrFail($post->id);
+//        $syncpost->tags()->sync($request->input('tages'));
        return back()->with('success','Post Added Successfully');
 
 
@@ -86,6 +91,8 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $post=Post::findOrFail($id);
+        Gate:$this->authorize('update_post',$post);
 
       $validate=  $request->validate([
             'title'=>'required|min:3|string',
@@ -115,4 +122,19 @@ class PostController extends Controller
       return view('posts.search',compact('posts'));
 
     }
+
+    public function showtags()
+    {
+        $post=new Post();
+        return $post->tags();
+    }
+
+    public function findpost(Request $request)
+    {
+ $txt=$request->name_txt;
+        $posts=Post::where('title','LIKE','%'.$request->name_txt.'%')->get();
+     return view('posts.index2',compact('posts','txt'));
+    }
+
+
 }
